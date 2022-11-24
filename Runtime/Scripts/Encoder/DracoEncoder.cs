@@ -28,6 +28,7 @@ namespace Draco.Encoder {
         public uint indexCount;
         public uint vertexCount;
         public NativeArray<byte> data;
+        public bool encodeSuccess;
 
         public void Dispose() {
             data.Dispose();
@@ -214,7 +215,7 @@ namespace Draco.Encoder {
                     Mathf.Clamp(genericQuantization,4,24)
                 );
 
-                dracoEncoderEncode(dracoEncoder, false);
+                bool success = dracoEncoderEncode(dracoEncoder, false);
                 
                 var dracoDataSize = (int) dracoEncoderGetByteLength(dracoEncoder);
                 
@@ -224,7 +225,8 @@ namespace Draco.Encoder {
                 result[submeshIndex] = new EncodeResult {
                     indexCount = dracoEncoderGetEncodedIndexCount(dracoEncoder),
                     vertexCount = dracoEncoderGetEncodedVertexCount(dracoEncoder),
-                    data = dracoData
+                    data = dracoData,
+                    encodeSuccess = success,
                 };
                 
                 dracoEncoderRelease(dracoEncoder);
